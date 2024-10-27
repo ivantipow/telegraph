@@ -1554,5 +1554,16 @@ function highlightFilter(filter) {
               }
               drawGraph();
         </script>
+      <script type="text/javascript">
+        window.addEventListener('resize', resizeCanvas, false);
+        
+        function resizeCanvas() {
+            const container = document.getElementById('mynetwork');
+            container.style.height = window.innerHeight + 'px';
+            container.style.width = window.innerWidth + 'px';
+        }
+        
+        resizeCanvas();
+        </script>
     </body>
 </html>
