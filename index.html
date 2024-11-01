@@ -227,7 +227,7 @@ function highlightFilter(filter) {
 
              #mynetwork {
                  width: 100%;
-                 height: 600px;
+                 height: 700px;
                  background-color: #ffffff;
                  border: 1px solid lightgray;
                  position: relative;
@@ -267,7 +267,7 @@ function highlightFilter(filter) {
     
         <div class="card" style="width: 100%">
             
-                <div id="select-menu" class="card-header">
+          <div id="select-menu" class="card-header" style="height: 3.8rem;">
                     <div class="row no-gutters">
                         <div class="col-10 pb-2">
                             <select
@@ -277,7 +277,7 @@ function highlightFilter(filter) {
                             id="select-node"
                             placeholder="Select node..."
                             >
-                                <option selected>Select a Node by ID</option>
+                                <option selected>Select a channel</option>
                                 
                                     <option value="kyrillic">kyrillic</option>
                                 
@@ -1312,7 +1312,7 @@ function highlightFilter(filter) {
                 </div>
             
             
-              <div id="filter-menu" class="card-header">
+              <div id="filter-menu" class="card-header" style="height: 3.8rem;">
                 <div class="row no-gutters">
                   <div class="col-3 pb-2">
                     <select
@@ -1321,9 +1321,9 @@ function highlightFilter(filter) {
                             onchange="updateFilter(value, 'item')"
                             id="select-item"
                         >
-                        <option value="">Select a network item</option>
+                        <!-- <option value="">Select a network item</option> -->
                         <option value="edge">edge</option>
-                        <option value="node">node</option>
+                        <!-- <option value="node">node</option> -->
                     </select>
                   </div>
                   <div class="col-3 pb-2">
@@ -1334,6 +1334,8 @@ function highlightFilter(filter) {
                             id="select-property"
                         >
                         <option value="">Select a property...</option>
+                        <option value="from">from</option>
+                        <option value="to">to</option>
                     </select>
                   </div>
                   <div class="col-3 pb-2">
