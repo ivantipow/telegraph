@@ -276,7 +276,7 @@ function highlightFilter(filter) {
                             aria-label="Default select example"
                             onchange="selectNode([value]);"
                             id="select-node"
-                            placeholder="Select node..."
+                            placeholder=""
                             >
                                 <option selected>Select a channel</option>
                                 
@@ -1322,6 +1322,8 @@ function highlightFilter(filter) {
                             onchange="updateFilter(value, 'item')"
                             id="select-item"
                         >
+                        <!-- <option value="node"></option> -->
+                        <option selected>Select graph element</option>
                         <option value="edge">edge</option>
                     </select>
                   </div>
@@ -1332,7 +1334,8 @@ function highlightFilter(filter) {
                             onchange="updateFilter(value, 'property')"
                             id="select-property"
                         >
-                        <option value="">Select direction...</option>
+                        <!-- <option value="">Select direction...</option> -->
+                        <!-- <option selected>Select direction...</option> -->
                         <option value="from">from</option>
                         <option value="to">to</option>
                     </select>
