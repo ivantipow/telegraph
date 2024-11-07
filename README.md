@@ -1,4 +1,4 @@
-# TeleGraph [[Link](https://ivantipow.github.io/TeleGraph/)]
+# TeleGraph [[Link](https://ivantipow.github.io/telegraph/)]
 
 Large Graph of Citations of Telegram channels on the topic of ML and AI.
 
