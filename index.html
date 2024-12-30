@@ -1,7 +1,9 @@
 <html>
     <head>
-      <link rel="icon" type="image/png" href="./favicon.png">
+        <link rel="icon" type="image/png" href="./favicon.png">
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        
         
             <script>function neighbourhoodHighlight(params) {
   // console.log("in nieghbourhoodhighlight");
@@ -226,14 +228,23 @@ function highlightFilter(filter) {
         </center>
         <style type="text/css">
 
-             #mynetwork {
-                 width: 100%;
-                 height: 100%;
-                 background-color: #ffffff;
-                 border: 1px solid lightgray;
-                 position: relative;
-                 float: left;
-             }
+#mynetwork {
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        margin: 0;
+        padding: 0;
+    }
+
+    body, html {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
 
              
 
@@ -259,16 +270,181 @@ function highlightFilter(filter) {
             display:none;
           }
              
+    #filter-menu,
+    #select-menu {
+        display: none;
+    }
+    
+    .menu-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 1000;
+        padding: 8px 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    
+    .menu-button:hover {
+        background-color: #0056b3;
+    }
+    /* Добавляем стили для заголовка */
+    .graph-title {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 16px;
+        z-index: 1000;
+    }
+        /* Обновляем стили для подсказки и кнопки */
+        .help-tooltip {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    z-index: 1000;
+    max-width: 500px;
+    border: 1px solid #ddd;
+}
+
+.help-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 999;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: none;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+/* Добавляем затемнение фона при открытом окне подсказки */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+}
+
+    /* Остальные стили остаются без изменений */
+    .close-tooltip {
+        float: right;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    .help-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 999;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.reset-button {
+    position: fixed;
+    bottom: 20px;
+    left: 70px; /* Располагаем на 50px правее кнопки help (20px + 40px + 10px отступ) */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid #ddd;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.reset-button:hover {
+    background: #f5f5f5;
+}
         </style>
     </head>
 
 
     <body>
-    <h1 style="text-align: center; font-size: 16px; color: #000000;">TeleGraph: Graph of citations in Telegram. Author: <a href="https://t.me/ai_about_ai" target="_blank" style="color: blue; text-decoration: none;" >@ai_about_ai</a></h1>
-    
-        <div class="card" style="width: 100%; height: 90%">
+<!-- Добавьте этот div перед окном подсказки -->
+
+<button id="resetView" class="reset-button">+</button>
+<div class="overlay" id="overlay"></div>
+    <!-- Добавляем кнопку помощи и подсказку -->
+    <button class="help-button" onclick="showTooltip()">?</button>
+    <div class="help-tooltip" id="helpTooltip">
+        <span class="close-tooltip" onclick="hideTooltip()">×</span>
+        <h4>TeleGraph: Graph of citations of channels about ML / DS / AI</h4>
+        <h5>What's that?</h5>
+        <ul>
+            <li>Each node is a telegram channel</li>
+            <li>Arrows A → B indicates that channel A cited channel B</li>
+            <li>Node size is the number of citations</li>
+            <li>Channels are arranged according to their similarity</li>
+        </ul>
+        <h5>How does it work?</h5>
+        <ul>
+            <li>Use the mouse to zoom and move</li>
+            <li>Hover over a channel to see information about it</li>
+            <li>Click on a channel to see its connections</li>
+            <li>Use the filters at the top to search</li>
+        </ul>
+    </div>
+      
+          <!-- Добавляем новый заголовок поверх графа -->
+    <div class="graph-title">
+      Author: <a href="https://t.me/ai_about_ai" target="_blank" style="color: blue; text-decoration: none;">@ai_about_ai</a>
+  </div>
+      <button class="menu-button" onclick="toggleMenu()">Filters</button>
+
+      <script>
+          function toggleMenu() {
+              const filterMenu = document.getElementById('filter-menu');
+              const selectMenu = document.getElementById('select-menu');
+              const button = document.querySelector('.menu-button');
+              
+              if (filterMenu.style.display === 'none' || filterMenu.style.display === '') {
+                  filterMenu.style.display = 'block';
+                  selectMenu.style.display = 'block';
+                  button.textContent = 'Close';
+              } else {
+                  filterMenu.style.display = 'none';
+                  selectMenu.style.display = 'none';
+                  button.textContent = 'Filters';
+              }
+          }
+      </script>
+        <div class="card" style="width: 100%">
             
-                <div id="select-menu" class="card-header" style="height: 3.8rem;">
+                <div id="select-menu" class="card-header">
                     <div class="row no-gutters">
                         <div class="col-10 pb-2">
                             <select
@@ -1431,13 +1607,13 @@ function highlightFilter(filter) {
                             </select>
                         </div>
                         <div class="col-2 pb-2">
-                            <button type="button" class="btn btn-primary btn-block" onclick="neighbourhoodHighlight({nodes: []});">Reset Selection</button>
+                            <button type="button" class="btn btn-primary btn-block" onclick="neighbourhoodHighlight({nodes: []});">Reset</button>
                         </div>
                     </div>
                 </div>
             
             
-              <div id="filter-menu" class="card-header" style="height: 3.8rem;">
+              <div id="filter-menu" class="card-header">
                 <div class="row no-gutters">
                   <div class="col-3 pb-2">
                     <select
@@ -1467,14 +1643,14 @@ function highlightFilter(filter) {
                             aria-label="Default select example"
                             id="select-value"
                         >
-                        <option value="">Select channel(s)...</option>
+                        <option value="">Select value(s)...</option>
                     </select>
                   </div>
                   <div class="col-1 pb-2">
                     <button type="button" class="btn btn-primary btn-block" onclick="highlightFilter(filter);">Filter</button>
                   </div>
                   <div class="col-2 pb-2">
-                    <button type="button" class="btn btn-primary btn-block" onclick="clearFilter(true)">Reset Selection</button>
+                    <button type="button" class="btn btn-primary btn-block" onclick="clearFilter(true)">Reset</button>
                   </div>
                 </div>
               </div>
@@ -1503,7 +1679,20 @@ function highlightFilter(filter) {
                   value : []
               };
 
-              
+
+      
+        // Добавляем функции для работы с подсказкой
+        function hideTooltip() {
+    document.getElementById('helpTooltip').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+    document.querySelector('.help-button').style.display = 'block';
+}
+
+function showTooltip() {
+    document.getElementById('helpTooltip').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block';
+    document.querySelector('.help-button').style.display = 'none';
+}
                   new TomSelect("#select-node",{
                       create: false,
                       sortField: {
@@ -1574,37 +1763,19 @@ function highlightFilter(filter) {
                   });
 
                   let addProperties = function() {
-                      return function () {
-                          // loops through the selected network item and adds the attributes to dropdown
-                          // tom-select handles duplicates
-                          clearFilter(false)
-                          if (arguments[0] === 'edge') {
-                              for (let each in allEdges) {
-                                  if (allEdges.hasOwnProperty(each)) {
-                                      for (let eachProp in allEdges[each]) {
-                                          if (allEdges[each].hasOwnProperty(eachProp)) {
-                                              propControl.addOption({id: eachProp, title: eachProp})
-                                          }
-                                      }
-                                  }
-                              }
-                          }
-                          else if (arguments[0] === 'node') {
-                              for (let each in allNodes) {
-                                  if (allNodes.hasOwnProperty(each)) {
-                                      for (let eachProp in allNodes[each]) {
-                                          if (allNodes[each].hasOwnProperty(eachProp)
-                                              && (eachProp !== 'hidden' && eachProp !== 'savedLabel'
-                                                  && eachProp !== 'hiddenLabel')) {
-                                              propControl.addOption({id: eachProp, title: eachProp})
-
-                                          }
-                                      }
-                                  }
-                              }
-                          }
-                      }
-                  };
+    return function () {
+        clearFilter(false)
+        if (arguments[0] === 'edge') {
+            // Добавляем только from и to для edges
+            propControl.addOption({id: 'from', title: 'from'});
+            propControl.addOption({id: 'to', title: 'to'});
+        }
+        else if (arguments[0] === 'node') {
+            // Добавляем только label для nodes
+            propControl.addOption({id: 'label', title: 'label'});
+        }
+    }
+};
 
                   let itemControl = new TomSelect("#select-item",{
                       create: false,
@@ -1693,7 +1864,7 @@ function highlightFilter(filter) {
       }
     }
   }
-}, "physics": {"enabled": false}, "font": {"color": "#ff6666", "mod": "bold"}, "interaction": {"zoomView": true, "dragView": true, "navigationButtons": false, "dragNodes": true, "hideEdgesOnDrag": true, "hideEdgesOnZoom": true, "hideNodesOnDrag": false, "hover": true, "hoverConnectedEdges": true, "selectConnectedEdges": true, "multiselect": true, "tooltipDelay": 300, "zoomSpeed": 0.7}, "filtering": {"enabled": true, "nodes": {"hidden": ["borderWidth", "borderWidthHover", "borderWidthSelected"]}}};
+}, "physics": {"enabled": false}, "font": {"color": "#ff6666", "mod": "bold"}, "interaction": {"zoomView": true, "dragView": true, "navigationButtons": false, "dragNodes": false, "hideEdgesOnDrag": true, "hideEdgesOnZoom": true, "hideNodesOnDrag": false, "hover": true, "hoverConnectedEdges": true, "selectConnectedEdges": true, "multiselect": true, "tooltipDelay": 300, "zoomSpeed": 0.7}, "filtering": {"enabled": true, "nodes": {"hidden": ["borderWidth", "borderWidthHover", "borderWidthSelected"]}}};
 
                   
 
@@ -1782,17 +1953,15 @@ function highlightFilter(filter) {
               }
               drawGraph();
         </script>
-        </script>
-      <script type="text/javascript">
-        window.addEventListener('resize', resizeCanvas, false);
-        
-        function resizeCanvas() {
-            const container = document.getElementById('mynetwork');
-            container.style.height = window.innerHeight - 200 + 'px';
-            container.style.width = window.innerWidth + 'px';
-        }
-        
-        resizeCanvas();
-        </script>
+        <script>
+          document.getElementById('resetView').addEventListener('click', function() {
+              network.fit({
+                  animation: {
+                      duration: 1000,
+                      easingFunction: 'easeInOutQuad'
+                  }
+              });
+          });
+          </script>
     </body>
 </html>
