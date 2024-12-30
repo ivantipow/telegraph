@@ -236,6 +236,7 @@ function highlightFilter(filter) {
         left: 0;
         margin: 0;
         padding: 0;
+        z-index: 1;
     }
 
     body, html {
@@ -304,28 +305,20 @@ function highlightFilter(filter) {
             display:none;
           }
              
-    #filter-menu,
     #select-menu {
         display: none;
-        z-index: 1001; /* Устанавливаем z-index выше, чем у графа */
+        z-index: 1003; /* Устанавливаем z-index выше, чем у графа */
+        background-color: white;
+        position: relative;
     }
     
-    .menu-button {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        z-index: 1000;
-        padding: 8px 16px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
+    #filter-menu{
+        display: none;
+        z-index: 1002; /* Устанавливаем z-index выше, чем у графа */
+        background-color: white;
+        position: relative;
     }
-    
-    .menu-button:hover {
-        background-color: #0056b3;
-    }
+
     /* Добавляем стили для заголовка */
     .graph-title {
         position: fixed;
@@ -370,7 +363,7 @@ function highlightFilter(filter) {
         padding: 10px;
         font-size: 24px;
         background: white;
-        z-index: 1005;
+        z-index: 1004;
     }
 }
 
@@ -442,7 +435,45 @@ function highlightFilter(filter) {
     align-items: center;
     justify-content: center;
 }
+.card {
+    position: relative;
+    /* z-index: 1002; */
+    margin: 0; /* Убираем margin */
+    padding: 0; /* Убираем padding */
+    border: none; /* Убираем border */
+}
+.menu-button,
+.btn-primary,
+.form-select,
+.ts-wrapper {
+    position: relative;
+    z-index: 1002; /* Делаем z-index ещё выше */
+}
 
+.menu-button {
+    position: fixed;
+    bottom: 20px;
+    left: 120px; /* 70px (позиция первой кнопки) + 40px (ширина) + 10px (отступ) */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    cursor: pointer;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+    
+    .menu-button:hover {
+        background-color: #0056b3;
+    }
+/* Добавляем стили для выпадающих списков Tom Select */
+.ts-dropdown {
+    z-index: 1003 !important; /* Делаем выпадающие списки поверх всего */
+}
 .reset-button:hover {
     background: #f5f5f5;
 }
@@ -454,6 +485,7 @@ function highlightFilter(filter) {
 <!-- Добавьте этот div перед окном подсказки -->
 
 <button id="resetView" class="reset-button">+</button>
+<button class="menu-button" onclick="toggleMenu()">Filter</button>
 <div class="overlay" id="overlay"></div>
     <!-- Добавляем кнопку помощи и подсказку -->
     <button class="help-button" onclick="showTooltip()">?</button>
@@ -480,7 +512,7 @@ function highlightFilter(filter) {
     <div class="graph-title">
       Author: <a href="https://t.me/ai_about_ai" target="_blank" style="color: blue; text-decoration: none;">@ai_about_ai</a>
   </div>
-      <button class="menu-button" onclick="toggleMenu()">Filters</button>
+      <!-- <button class="menu-button" onclick="toggleMenu()">Filters</button> -->
 
       <script>
           function toggleMenu() {
@@ -491,11 +523,11 @@ function highlightFilter(filter) {
               if (filterMenu.style.display === 'none' || filterMenu.style.display === '') {
                   filterMenu.style.display = 'block';
                   selectMenu.style.display = 'block';
-                  button.textContent = 'Close';
+                  button.textContent = 'Filter';
               } else {
                   filterMenu.style.display = 'none';
                   selectMenu.style.display = 'none';
-                  button.textContent = 'Filters';
+                  button.textContent = 'Filter';
               }
           }
       </script>
@@ -503,13 +535,13 @@ function highlightFilter(filter) {
             
                 <div id="select-menu" class="card-header">
                     <div class="row no-gutters">
-                        <div class="col-10 pb-2">
+                        <div class="col-10 pb-1">
                             <select
                             class="form-select"
                             aria-label="Default select example"
                             onchange="selectNode([value]);"
                             id="select-node"
-                            placeholder="Select node..."
+                            placeholder="Select channel..."
                             >
                                 <option selected>Select a channel</option>
                                 
