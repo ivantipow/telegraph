@@ -264,7 +264,41 @@ function highlightFilter(filter) {
                  border: 1px solid #808074;
                  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
           }
+          .popup {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    max-width: 90vw; /* Максимальная ширина 90% от ширины экрана */
+    max-height: 80vh; /* Максимальная высота 80% от высоты экрана */
+    overflow-y: auto; /* Добавляем прокрутку */
+    box-sizing: border-box;
+    z-index: 1000;
+}
 
+/* Стили для мобильных устройств */
+@media screen and (max-width: 768px) {
+    .popup {
+        position: fixed !important; /* Принудительно фиксируем позицию */
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        font-size: 14px; /* Уменьшаем размер шрифта */
+        max-height: 60vh; /* Уменьшаем максимальную высоту */
+        width: 85vw; /* Ширина 85% от ширины экрана */
+    }
+    
+    /* Стили для таблицы внутри popup */
+    .popup table {
+        width: 100%;
+        font-size: 14px;
+    }
+    
+    .popup td {
+        padding: 5px;
+        word-break: break-word; /* Разрешаем перенос длинных слов */
+    }
+}
           /* hide the original tooltip */
           .vis-tooltip {
             display:none;
